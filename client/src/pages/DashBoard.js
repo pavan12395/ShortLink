@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 import { FiLink } from 'react-icons/fi';
 import NavBar from '../components/NavBar';
+import { FiLogOut } from 'react-icons/fi';
 const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -264,6 +265,12 @@ const Dashboard = () => {
     const file = e.target.files[0];
     setInputFile(file);
   }
+  const handleUpload = (e)=>
+  {
+    e.preventDefault();
+    localStorage.removeItem("accessToken");
+    navigate("/");
+  }
   return (
     <>
     <NavBar/>  
@@ -298,6 +305,9 @@ const Dashboard = () => {
           </FileItem>
         ))}
       </FileList>
+      <IconButton title="logout-button" className="logout-button" onClick={handleUpload}>
+        <FiLogOut/>
+      </IconButton>
       {showModal && (
         <Modal>
           <ModalContent>
