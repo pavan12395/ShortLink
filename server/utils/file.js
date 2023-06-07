@@ -10,7 +10,6 @@ const max_file_size = parseInt(process.env.MAX_SIZE);
 const util = require('util');
 const { validateHeaderValue } = require("http");
 
-const readdir = util.promisify(fs.readdir);
 
 async function storeFile(fileName,fileContent)
 {
@@ -141,15 +140,15 @@ async function getFileName(fileHash)
 
 async function listFiles(userName)
 {
-  const directoryPath = path.join(__dirname,"..","uploads");
-  const files = await readdir(directoryPath);
-  var matchingFiles = files.filter((file) => file.startsWith(userName));
-  matchingFiles = matchingFiles.map((file)=>
+  try
   {
-      const index = file.indexOf("_");
-      return file.substring(index+1);
-  })
-  return matchingFiles;  
+    const files = await File.find({ name: { $regex: `^${userName}`, $options: 'i' } }).select('name shortlink');
+    return files;
+  }
+  catch(err)
+  {
+    throw new Error("Error occured when listing files! "+err.message);
+  }
 }
 
 module.exports = {storeFileRecord,storeFile,deleteFile,deleteFileRecord,cleanFiles,getFiles,hashString,readFile,validateFile,getFileName,listFiles}

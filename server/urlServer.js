@@ -75,7 +75,13 @@ UrlRouter.get("/listfiles",checkToken,async (req,res,next)=>
 {
     try
     {
-        const files = await listFiles(req.token.name);
+        var files = await listFiles(req.token.name);
+        files = files.map(((file)=>
+        {
+            const index = file.name.indexOf("_");
+            file.name = file.name.substring(index+1);
+            return file;
+        }))
         return res.status(200).json({message:"Fetched Successfully!",files:files});
     }
     catch(err)

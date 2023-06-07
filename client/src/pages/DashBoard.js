@@ -118,7 +118,29 @@ async function getListOfFiles() {
 async function uploadFile(file)
 {
 }
-
+async function downloadFile(file)
+{
+    const shortLink = file.shortlink;
+    var url = "http://localhost:5000/downloads/"+shortLink;
+    const headers = {
+        'Authorization': "Bearer "+localStorage.getItem("accessToken"),
+        'Content-Type': 'application/octet-stream',
+    }
+    const response = await fetch(url,headers);
+    const blob = await response.blob();
+      url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download',file.name);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    if(!response.ok)
+    {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
+}
 async function deleteFile(file)
 {
      const url = "http://localhost:5000/file/"+file;
@@ -158,7 +180,7 @@ const Dashboard = () => {
   };
 
   const handleRemoveFile = (file) => {
-    deleteFile(file).then(()=>
+    deleteFile(file.name).then(()=>
     {
         setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
     }).catch((err)=>
@@ -168,7 +190,15 @@ const Dashboard = () => {
         setShowModal(true);
     })
   };
-
+  const handleDownloadFile = (file)=>
+  {
+     downloadFile(file).catch((err)=>
+     {
+        setErrorMessage(err.message);
+        setStatusCode("");
+        setShowModal(true);
+     })
+  }
   const closeModal = () => {
     setShowModal(false);
   };
@@ -187,12 +217,12 @@ const Dashboard = () => {
       <FileList>
         {files.map((file, index) => (
           <FileItem key={index}>
-            <FileName>{file}</FileName>
+            <FileName>{file.name}</FileName>
             <div>
               <IconButton onClick={() => handleRemoveFile(file)}>
                 <AiOutlineDelete />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={()=> handleDownloadFile(file)}>
                 <AiOutlineDownload />
               </IconButton>
             </div>
