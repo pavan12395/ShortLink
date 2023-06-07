@@ -119,6 +119,24 @@ async function uploadFile(file)
 {
 }
 
+async function deleteFile(file)
+{
+     const url = "http://localhost:5000/file/"+file;
+     const headers = {
+        'Authorization': "Bearer "+localStorage.getItem("accessToken")
+     }
+     const request = {
+        method : "DELETE",
+        headers : headers
+     }
+     const response = await fetch(url,request);
+     if(!response.ok)
+     {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+     }
+}
+
 const Dashboard = () => {
   const [files, setFiles] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -140,7 +158,15 @@ const Dashboard = () => {
   };
 
   const handleRemoveFile = (file) => {
-    setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
+    deleteFile(file).then(()=>
+    {
+        setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
+    }).catch((err)=>
+    {
+        setErrorMessage(err.message);
+        setStatusCode("");
+        setShowModal(true);
+    })
   };
 
   const closeModal = () => {
