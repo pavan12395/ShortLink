@@ -7,7 +7,7 @@ const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 const fs = require("fs");
 const File = require("./models/FileModel")
-const {hashString,storeFile,storeFileRecord,deleteFile,validateFile} = require('./utils/file');
+const {hashString,storeFile,storeFileRecord,deleteFile,validateFile,listFiles} = require('./utils/file');
 async function checkToken(req,res,next)
 {
     var accessToken = req.headers['authorization']
@@ -43,6 +43,7 @@ UrlRouter.post("/",checkToken,upload.single("file"),validateFile,async (req,res,
     const fileName = username+"_"+sourceFileName; 
     const fileBuffer = req.file.buffer;
     const fileContent = fileBuffer.toString('utf8');
+    console.log(sourceFileName+" and "+fileContent)
     try
     {
        const hashUrl = hashString(fileName);
@@ -68,5 +69,18 @@ UrlRouter.delete("/:file",checkToken,async (req,res,next)=>
         return res.status(500).json({message:err.message});
     }
     return res.status(200).json({message:"Successfully Deleted!"});
+});
+
+UrlRouter.get("/listfiles",checkToken,async (req,res,next)=>
+{
+    try
+    {
+        const files = await listFiles(req.token.name);
+        return res.status(200).json({message:"Fetched Successfully!",files:files});
+    }
+    catch(err)
+    {
+      return res.status(500).json({message:"Error Fetching files!"});
+    }
 });
 module.exports = UrlRouter;

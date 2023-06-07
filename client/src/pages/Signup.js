@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const SignUpContainer = styled.div`
@@ -55,10 +55,86 @@ const LoginLink = styled(Link)`
   color: #007bff;
 `;
 
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ModalContent = styled.div`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+`;
+
+const ModalCloseButton = styled.button`
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  color: #aaa;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
+
+const ModalTitle = styled.h2`
+  margin-top: 0;
+`;
+
+const ModalMessage = styled.p`
+  margin-bottom: 0;
+`;
+
 const SignUp = () => {
-  const handleSubmit = (e) => {
+  const nameRef = useRef();
+  const passwordRef = useRef();
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [statusCode, setStatusCode] = useState(0);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle sign up logic here
+    try {
+      const response = await fetch('http://localhost:5000/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: nameRef.current.value,
+          password: passwordRef.current.value,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('accessToken', data.accessToken);
+        navigate('/dashboard');
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message);
+        setStatusCode(response.status);
+        setShowModal(true);
+      }
+    } catch (error) {
+        setErrorMessage(error.message);
+        setStatusCode("");
+        setShowModal(true);
+    }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    nameRef.current.value="";
+    passwordRef.current.value="";
   };
 
   return (
@@ -68,17 +144,29 @@ const SignUp = () => {
           <IconWrapper>
             <AiOutlineUser />
           </IconWrapper>
-          <InputField type="text" placeholder="Username" />
+          <InputField type="text" placeholder="Username" ref={nameRef} />
         </InputContainer>
         <InputContainer>
           <IconWrapper>
             <AiOutlineLock />
           </IconWrapper>
-          <InputField type="password" placeholder="Password" />
+          <InputField type="password" placeholder="Password" ref={passwordRef} />
         </InputContainer>
         <SignUpButton type="submit">Sign Up</SignUpButton>
       </SignUpForm>
       <LoginLink to="/login">Already have an account? Login</LoginLink>
+
+      {showModal && (
+        <Modal>
+          <ModalContent>
+            <ModalCloseButton onClick={closeModal}>×</ModalCloseButton>
+            <ModalTitle>Error</ModalTitle>
+            <ModalMessage>
+              Error Message: {errorMessage} (Status Code: {statusCode})
+            </ModalMessage>
+          </ModalContent>
+        </Modal>
+      )}
     </SignUpContainer>
   );
 };

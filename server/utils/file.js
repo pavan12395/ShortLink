@@ -7,6 +7,11 @@ const path = require("path")
 const defaultExpiryInSeconds = parseInt(process.env.DEFAULT_EXPIRY, 10);
 const allowedExtensions = process.env.ALLOWED_EXTENSIONS.split(',');
 const max_file_size = parseInt(process.env.MAX_SIZE);
+const util = require('util');
+const { validateHeaderValue } = require("http");
+
+const readdir = util.promisify(fs.readdir);
+
 async function storeFile(fileName,fileContent)
 {
   try
@@ -110,7 +115,7 @@ function validateFile(req,res,next)
     const file_size = file.size;
     var extension = file.originalname;
     extension  = extension.split('.')[1];
-    if(extension in allowedExtensions && file_size<=max_file_size)
+    if(allowedExtensions.includes(extension) && file_size<=max_file_size)
     {
         return next();
     }
@@ -127,7 +132,24 @@ function validateFile(req,res,next)
 async function getFileName(fileHash)
 {
     const file = await File.findOne({shortlink:fileHash},'name');
+    if(file==null)
+    {
+       throw new Error("File not found!");
+    }
     return file.name;
 }
 
-module.exports = {storeFileRecord,storeFile,deleteFile,deleteFileRecord,cleanFiles,getFiles,hashString,readFile,validateFile,getFileName}
+async function listFiles(userName)
+{
+  const directoryPath = path.join(__dirname,"..","uploads");
+  const files = await readdir(directoryPath);
+  var matchingFiles = files.filter((file) => file.startsWith(userName));
+  matchingFiles = matchingFiles.map((file)=>
+  {
+      const index = file.indexOf("_");
+      return file.substring(index+1);
+  })
+  return matchingFiles;  
+}
+
+module.exports = {storeFileRecord,storeFile,deleteFile,deleteFileRecord,cleanFiles,getFiles,hashString,readFile,validateFile,getFileName,listFiles}
