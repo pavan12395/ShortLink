@@ -37,7 +37,14 @@
   }
 }
 
-*
+.logout-button
+{
+   margin-left: 85%;
+   transform: scale(1.5);
+   cursor: pointer;
+}
+
+/* *
 {
   transform: scale(1.1);
-}
+} */

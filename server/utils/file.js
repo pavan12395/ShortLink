@@ -112,8 +112,8 @@ function validateFile(req,res,next)
 {
     const file = req.file;
     const file_size = file.size;
-    var extension = file.originalname;
-    extension  = extension.split('.')[1];
+    var index = file.originalname.lastIndexOf(".");
+    var extension = file.originalname.substring(index+1);
     if(allowedExtensions.includes(extension) && file_size<=max_file_size)
     {
         return next();

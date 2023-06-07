@@ -1,10 +1,13 @@
-import React, { useEffect, useState,useRef} from 'react';
+import React, { useEffect, useState} from 'react';
 import { AiOutlineUpload, AiOutlineDownload, AiOutlineDelete } from 'react-icons/ai';
 import styled from 'styled-components';
-
+import {useNavigate} from 'react-router-dom';
+import { FiLink } from 'react-icons/fi';
+import NavBar from '../components/NavBar';
 const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
+  flex-direction: column;
 `;
 
 const DashboardContainer = styled.div`
@@ -13,6 +16,7 @@ const DashboardContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
+  transform: scale(2)
 `;
 
 const UploadButton = styled.label`
@@ -75,6 +79,9 @@ const ModalContent = styled.div`
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
+  max-width: 400px; /* Set the maximum width of the modal content */
+  word-wrap: break-word; /* Wrap long text */
+  text-align: center; /* Center-align the content */
 `;
 
 const ModalCloseButton = styled.button`
@@ -94,6 +101,12 @@ const ModalTitle = styled.h2`
 
 const ModalMessage = styled.p`
   margin-bottom: 0;
+`;
+
+const FileContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 
@@ -117,6 +130,24 @@ async function getListOfFiles() {
 
 async function uploadFile(file)
 {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await fetch('http://localhost:5000/file', {
+        method: 'POST',
+        headers: {
+        'Authorization': "Bearer "+localStorage.getItem("accessToken"),
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.url;
+        // Do something with the response if needed
+      } else {
+        const errData = await response.json();
+        throw new Error(errData.message);
+      }
 }
 async function downloadFile(file)
 {
@@ -162,21 +193,43 @@ async function deleteFile(file)
 const Dashboard = () => {
   const [files, setFiles] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
   const [statusCode, setStatusCode] = useState(0);
+  const navigate = useNavigate();
   useEffect(()=>
   {
+     var accessToken = localStorage.getItem("accessToken");
+     if(accessToken==null || accessToken.length == null)
+     {
+        alert("Forbidden Page : User is Not Auhthenticated!");
+        navigate("/");
+        return;
+     }
      getListOfFiles().then((fetchedFiles) =>
      {
         setFiles(fetchedFiles)
      }).catch((err)=>
      {
-        setErrorMessage(err.message);
+        setErrorMessage({message:err.message,error:false});
         setStatusCode("");
         setShowModal(true);
      });
   },[])
   const handleFileUpload = async(e) => {
+    e.preventDefault();
+    uploadFile(inputFile).then((url)=>
+    {
+        const new_file = {name : inputFile.name,shortlink : url};
+        setErrorMessage({message:"Access the link at localhost:5000/"+url,erorr:true});
+        setStatusCode("");
+        setShowModal(true);
+        setFiles([...files,new_file]);
+    }).catch((err)=>
+    {
+        setErrorMessage({message:err.message,error:false});
+        setStatusCode("");
+        setShowModal(true);
+    });
   };
 
   const handleRemoveFile = (file) => {
@@ -185,7 +238,7 @@ const Dashboard = () => {
         setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
     }).catch((err)=>
     {
-        setErrorMessage(err.message);
+        setErrorMessage({message:err.message,error:false});
         setStatusCode("");
         setShowModal(true);
     })
@@ -194,7 +247,7 @@ const Dashboard = () => {
   {
      downloadFile(file).catch((err)=>
      {
-        setErrorMessage(err.message);
+        setErrorMessage({message:err.message,error:false});
         setStatusCode("");
         setShowModal(true);
      })
@@ -202,14 +255,25 @@ const Dashboard = () => {
   const closeModal = () => {
     setShowModal(false);
   };
-  const inputFileRef = useRef();
+  const [inputFile,setInputFile] = useState(null);
+  const fileChangeHandler = (e)=>
+  {
+    e.preventDefault();
+    const file = e.target.files[0];
+    setInputFile(file);
+  }
   return (
+    <>
+    <NavBar/>  
     <DashboardContainer>
       <ButtonContainer>
+        <FileContainer>
         <FileButton>
           <label>Choose File!</label>
-          <input type="file" style={{ display: 'none' }} ref={inputFileRef}/>
+          <input type="file" onChange={fileChangeHandler} style={{ display: 'none' }} ref={inputFile}/>
         </FileButton>
+        <FileName>{inputFile!=null ? inputFile.name : ""}</FileName>
+        </FileContainer>
         <UploadButton onClick={handleFileUpload}>
           <AiOutlineUpload />
         </UploadButton>
@@ -225,6 +289,9 @@ const Dashboard = () => {
               <IconButton onClick={()=> handleDownloadFile(file)}>
                 <AiOutlineDownload />
               </IconButton>
+              <IconButton onClick={() => window.open(`http://localhost:5000/${file.shortlink}`, '_blank')}>
+            <FiLink />
+            </IconButton>
             </div>
           </FileItem>
         ))}
@@ -233,14 +300,22 @@ const Dashboard = () => {
         <Modal>
           <ModalContent>
             <ModalCloseButton onClick={closeModal}>×</ModalCloseButton>
-            <ModalTitle>Error</ModalTitle>
-            <ModalMessage>
-              Error Message: {errorMessage} (Status Code: {statusCode})
-            </ModalMessage>
+            <ModalTitle>Message!</ModalTitle>
+                {              
+                   errorMessage.error ? 
+                   <ModalMessage>
+                    Error Message: {errorMessage.message} (Status Code: {statusCode}) 
+                   </ModalMessage>
+                   :
+                   <ModalMessage> 
+                   <p>{errorMessage.message}</p>
+                   </ModalMessage>
+                }
           </ModalContent>
         </Modal>
       )}
     </DashboardContainer>
+    </>
   );
 };
 

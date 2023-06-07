@@ -11,8 +11,10 @@ const {hashString,storeFile,storeFileRecord,deleteFile,validateFile,listFiles} =
 async function checkToken(req,res,next)
 {
     var accessToken = req.headers['authorization']
+    if(accessToken===null || accessToken.length==0){return res.status(401).json({message:"Invalid Token!"});}
     accessToken = accessToken.split(' ')[1]
-    if(accessToken===null){return res.status(401);}
+    if(accessToken===null || accessToken.length==0){return res.status(401).json({message:"Invalid Token!"});}
+
     else
     {
         try
