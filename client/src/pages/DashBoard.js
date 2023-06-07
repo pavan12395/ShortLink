@@ -16,7 +16,7 @@ const DashboardContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  transform: scale(2)
+  transform : scale(1.1)
 `;
 
 const UploadButton = styled.label`
@@ -83,6 +83,7 @@ const ModalContent = styled.div`
   word-wrap: break-word; /* Wrap long text */
   text-align: center; /* Center-align the content */
 `;
+
 
 const ModalCloseButton = styled.button`
   background-color: transparent;
@@ -254,6 +255,7 @@ const Dashboard = () => {
   }
   const closeModal = () => {
     setShowModal(false);
+    setInputFile(null);
   };
   const [inputFile,setInputFile] = useState(null);
   const fileChangeHandler = (e)=>

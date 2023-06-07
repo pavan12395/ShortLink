@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -99,7 +99,14 @@ const SignUp = () => {
   const [showModal, setShowModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [statusCode, setStatusCode] = useState(0);
-
+  useEffect(()=>
+  {
+    var accessToken = localStorage.getItem("accessToken");
+    if(accessToken)
+    {
+        navigate("/dashboard");
+    }
+  },[]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
