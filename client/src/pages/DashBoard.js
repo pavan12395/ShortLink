@@ -115,7 +115,7 @@ const FileContainer = styled.div`
 
 
 async function getListOfFiles() {
-    const url = 'http://localhost:5000/file/listfiles';
+    const url = 'https://localhost:5000/file/listfiles';
     const headers = {
       'Authorization': "Bearer "+localStorage.getItem("accessToken")
     };  
@@ -135,7 +135,7 @@ async function uploadFile(file)
 {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await axios.post('http://localhost:5000/file',formData, {
+    const response = await axios.post('https://localhost:5000/file',formData, {
         headers: {
         'Authorization': "Bearer "+localStorage.getItem("accessToken"),
         }
@@ -153,7 +153,7 @@ async function uploadFile(file)
 async function downloadFile(file)
 {
     const shortLink = file.shortlink;
-    var url = "http://localhost:5000/downloads/"+shortLink;
+    var url = "https://localhost:5000/downloads/"+shortLink;
     const headers = {
         'Authorization': "Bearer "+localStorage.getItem("accessToken"),
         'Content-Type': 'application/octet-stream',
@@ -181,7 +181,7 @@ async function downloadFile(file)
 }
 async function deleteFile(file)
 {
-     const url = "http://localhost:5000/file/"+file;
+     const url = "https://localhost:5000/file/"+file;
      const headers = {
         'Authorization': "Bearer "+localStorage.getItem("accessToken")
      }
@@ -299,7 +299,7 @@ const Dashboard = () => {
               <IconButton onClick={()=> handleDownloadFile(file)}>
                 <AiOutlineDownload />
               </IconButton>
-              <IconButton onClick={() => window.open(`http://localhost:5000/${file.shortlink}`, '_blank')}>
+              <IconButton onClick={() => window.open(`https://localhost:5000/${file.shortlink}`, '_blank')}>
             <FiLink />
             </IconButton>
             </div>

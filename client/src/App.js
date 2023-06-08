@@ -13,7 +13,7 @@ import axios from 'axios';
 const App = () => {
   const makeAPICall = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/', {mode:'cors'});
+      const response = await axios.get('https://localhost:5000/', {mode:'cors'});
       const data = response.data;
       console.log({ data });
     }
