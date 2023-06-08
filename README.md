@@ -52,6 +52,8 @@ The Node application utilizes the following Mongoose models:
 
 The Node application reads certain entities from the `.env` file. The following configurations can be customized:
 
+- `MONGOOSE_CONNECTION_STRING`: MongoDB connection string. Specify the connection URI for your MongoDB database. If you don't have MongoDB on your local machine, you can start a Docker container of MongoDB and include the connection URI in the `.env` file.
+- `ACCESS_TOKEN_SECRET_KEY`: Secret key used for JWT token generation and verification.
 - `DEFAULT_EXPIRY`: Default expiration time (in minutes) for uploaded files (default: 5)
 - `DEFAULT_INTERVAL`: Default interval (in minutes) for the cleanFiles job to run (default: 30)
 - `ALLOWED_EXTENSIONS`: Comma-separated list of allowed file extensions (default: txt,lam,json,py,java,c,js,tsx,jsx,go,html,css)
@@ -86,3 +88,31 @@ The application relies on the following dependencies:
 - Mongoose: Object Data Modeling (ODM) library for MongoDB and Node.js
 
 Please ensure that these dependencies are properly installed before running the application.
+
+## LocalSetup Guide
+
+set up the application on your local machine, follow these steps:
+
+1. Clone the repository:
+   git clone <repository-url>
+
+2. Start the frontend application by navigating to the `client` directory and running the following command:
+   cd client
+   npm start
+
+3. Start the backend application by navigating to the `server` directory and running the following command:
+   cd server
+   npm start
+
+4. If you have MongoDB installed on your local machine, mention the connection URI in the `/server/.env` file. Otherwise, start a Docker container of MongoDB and include the connection URI in the `.env` file.
+
+
+## QuickStart Guide
+
+1. Execute the docker-compose.yaml file and find that three services(frontend,backend,monogodb) are running by the following command
+         `docker compose up`
+2. Access frontend at localhost:3000
+3. Access Backend at localhost:5000
+
+
+
