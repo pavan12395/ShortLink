@@ -1,4 +1,4 @@
-export const HOST_PATH = "http://localhost:5000/";
+export const HOST_PATH = "http://52.201.232.145:5000/";
 export const UPLOAD_FILE_ROUTE = HOST_PATH+"file";
 export const DOWNLOAD_FILE_ROUTE = HOST_PATH+"downloads/";
 export const BEARER = "Bearer "
