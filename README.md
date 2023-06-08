@@ -113,6 +113,11 @@ set up the application on your local machine, follow these steps:
 2. Access frontend at localhost:3000
 3. Access Backend at localhost:5000
 
+## Deployment Procedure
+
+1. Dockerized the front-end and back-end
+2. Made use of Docker-compose to host the application on Amazon EC2.
+
 
 ## Access the hosted application at http://52.201.232.145:3000/
 
