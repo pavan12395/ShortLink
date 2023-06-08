@@ -142,7 +142,7 @@ async function listFiles(userName)
 {
   try
   {
-    const files = await File.find({ name: { $regex: `^${userName}`, $options: 'i' } }).select('name shortlink');
+    const files = await File.find({ name: { $regex: `^${userName}_`, $options: 'i' } }).select('name shortlink');
     return files;
   }
   catch(err)

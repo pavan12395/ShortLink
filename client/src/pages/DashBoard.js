@@ -159,26 +159,23 @@ async function downloadFile(file)
         AUTHORIZATION: BEARER+localStorage.getItem(ACCESS_TOKEN),
         CONTENT_TYPE : OCTET_STREAM,
     }
-    axios({
-      url: url, //your url
-      method: GET,
-      responseType: BLOB,
-      headers : headers ,// important
-  }).then((response) => {
-      // create file link in browser's memory
-      const href = URL.createObjectURL(response.data);
-  
+      const response = await axios.get(url, {
+        responseType: 'blob',
+      });
+
+      const blob = new Blob([response.data]);
+
+      const href = URL.createObjectURL(blob);
+
       // create "a" HTML element with href to file & click
       const link = document.createElement('a');
       link.href = href;
-      link.setAttribute(DOWNLOAD, file.name); //or any other extension
+      link.setAttribute('download', file.name); // set the filename
       document.body.appendChild(link);
       link.click();
-  
       // clean up "a" element & remove ObjectURL
       document.body.removeChild(link);
       URL.revokeObjectURL(href);
-  });
 }
 async function deleteFile(file)
 {
@@ -214,7 +211,7 @@ const Dashboard = () => {
         setFiles(fetchedFiles)
      }).catch((err)=>
      {
-        setErrorMessage(err.response ? err.response.data.message : err.message);
+        setErrorMessage({error:true,message:err.response ? err.response.data.message : err.message});
         setStatusCode("");
         setShowModal(true);
      });
@@ -224,13 +221,13 @@ const Dashboard = () => {
     uploadFile(inputFile).then((url)=>
     {
         const new_file = {name : inputFile.name,shortlink : url};
-        setErrorMessage({message:ACCESS_MESSAGE+url,erorr:true});
+        setErrorMessage({message:ACCESS_MESSAGE+url,error:false});
         setStatusCode("");
         setShowModal(true);
         setFiles([...files,new_file]);
     }).catch((err)=>
     {
-      setErrorMessage(err.response ? err.response.data.message : err.message);
+      setErrorMessage({message : err.response ? err.response.data.message : err.message,error:true});
         setStatusCode("");
         setShowModal(true);
     });
@@ -242,7 +239,7 @@ const Dashboard = () => {
         setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
     }).catch((err)=>
     {
-        setErrorMessage(err.response ? err.response.data.message : err.message);
+        setErrorMessage({message: err.response ? err.response.data.message : err.message,error:true});
         setStatusCode("");
         setShowModal(true);
     })
@@ -251,7 +248,8 @@ const Dashboard = () => {
   {
      downloadFile(file).catch((err)=>
      {
-        setErrorMessage(err.response ? err.response.data.message : err.message);
+        console.log(err)
+        setErrorMessage({message: err.response ? err.response.data.message : err.message,error:true});
         setStatusCode("");
         setShowModal(true);
      })

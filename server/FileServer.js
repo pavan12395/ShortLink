@@ -13,6 +13,7 @@ FileRouter.get("/:hash",async (req,res)=>
     {
         return res.status(400).json({message:PARAM_MISSING});
     }
+    try{
     var fileName = await getFileName(fileHash);
     if(fileName==null || fileName.length==0)
     {
@@ -31,7 +32,11 @@ FileRouter.get("/:hash",async (req,res)=>
         {
             return res.status(500).json({message:ERROR_FETCHING_FILE+err.message});
         }
+    }}
+    catch(err)
+    {
+        return res.status(404).json({message:FILE_NOT_FOUND});
     }
 });
-setInterval(cleanFiles,defaultIntervalInSeconds*1000);
+// setInterval(cleanFiles,defaultIntervalInSeconds*1000);
 module.exports = FileRouter
