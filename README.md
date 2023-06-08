@@ -114,4 +114,7 @@ set up the application on your local machine, follow these steps:
 3. Access Backend at localhost:5000
 
 
+## Access the hosted application at http://52.201.232.145:3000/
+
+
 
