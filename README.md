@@ -53,8 +53,8 @@ The Node application reads certain entities from the `.env` file. The following 
 
 - `MONGOOSE_CONNECTION_STRING`: MongoDB connection string. Specify the connection URI for your MongoDB database. If you don't have MongoDB on your local machine, you can start a Docker container of MongoDB and include the connection URI in the `.env` file.
 - `ACCESS_TOKEN_SECRET_KEY`: Secret key used for JWT token generation and verification.
-- `DEFAULT_EXPIRY`: Default expiration time (in minutes) for uploaded files (default: 5)
-- `DEFAULT_INTERVAL`: Default interval (in minutes) for the cleanFiles job to run (default: 30)
+- `DEFAULT_EXPIRY`: Default expiration time (in seconds) for uploaded files (default: 5)
+- `DEFAULT_INTERVAL`: Default interval (in seconds) for the cleanFiles job to run (default: 30)
 - `ALLOWED_EXTENSIONS`: Comma-separated list of allowed file extensions (default: txt,lam,json,py,java,c,js,tsx,jsx,go,html,css)
 - `MAX_SIZE`: Maximum size (in bytes) for uploaded files (default: 5000000)
 
@@ -93,7 +93,7 @@ Please ensure that these dependencies are properly installed before running the 
 set up the application on your local machine, follow these steps:
 
 1. Clone the repository:
-   git clone <repository-url>
+   git clone https://github.com/pavan12395/ShortLink.git
 
 2. Start the frontend application by navigating to the `client` directory and running the following command:
    cd client
@@ -104,6 +104,7 @@ set up the application on your local machine, follow these steps:
    npm start
 
 4. If you have MongoDB installed on your local machine, mention the connection URI in the `/server/.env` file. Otherwise, start a Docker container of MongoDB and include the connection URI in the `.env` file.
+`docker run -p 80:80 --name mycontainer -e USERNAME=user -e PASSWORD=password myimage`
 
 
 ## QuickStart Guide
