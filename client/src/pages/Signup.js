@@ -121,13 +121,13 @@ const SignUp = () => {
         localStorage.setItem('accessToken', data.accessToken);
         navigate('/dashboard');
       } else {
-        const errorData = await response.data;
+        const errorData = response.data;
         setErrorMessage(errorData.message);
         setStatusCode(response.status);
         setShowModal(true);
       }
     } catch (error) {
-        setErrorMessage(error.response.data.message);
+        setErrorMessage(error.response ? error.response.data.message : error.message);
         setStatusCode("");
         setShowModal(true);
     }

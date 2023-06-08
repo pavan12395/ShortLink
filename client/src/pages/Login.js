@@ -116,7 +116,7 @@ const Login = () => {
           setShowModal(true);
         }
       } catch (error) {
-        setErrorMessage(error.response.data.message);
+        setErrorMessage(error.response ? error.response.data.message : error.message);
           setStatusCode("");
           setShowModal(true);
       }
