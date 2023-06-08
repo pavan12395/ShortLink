@@ -111,8 +111,8 @@ const SignUp = () => {
   },[]);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    validateCredentials(nameRef.current.value,passwordRef.current.value);
     try {
+    await validateCredentials(nameRef.current.value,passwordRef.current.value);
       const response = await axios.post(SIGNUP_ROUTE, {
           name: nameRef.current.value,
           password: passwordRef.current.value,

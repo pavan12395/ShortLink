@@ -20,7 +20,7 @@ export const POST_SUCCESS_STATUS_CODE = 201;
 export const GET_SUCCESS_STATUS_CODE = 200;
 export const SIGNUP_HREF = "/";
 export const LOGIN_HREF = "/login";
-export function validateCredentials(name,password)
+export async function validateCredentials(name,password)
 {
     if(name.length==0)
     {
