@@ -1,18 +1,22 @@
-FROM alpine
+# Use an official Node.js runtime as the base image
+FROM node:14
 
-# Install Node.js and npm dependencies
-RUN apk add --no-cache nodejs npm
+# Set the working directory in the container
+WORKDIR /app
 
+# Copy package.json and package-lock.json (if available)
+COPY package*.json ./
 
-WORKDIR /backend
+RUN npm update
 
-COPY package*.json .
+# Install the application dependencies
+RUN npm install
 
-
-RUN apk update && apk add curl
-
+# Copy the application code to the container
 COPY . .
 
+# Expose port 5000
 EXPOSE 5000
 
-CMD rm -rf node_modules && ["npm","update"] && ["npm","install"] && ["npm","start"]
+# Start the Node.js application
+CMD [ "npm", "start" ]
