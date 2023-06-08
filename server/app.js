@@ -14,13 +14,17 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
+app.use(cors());
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
+app.get('/cors', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.send({ "msg": "This has CORS enabled 🎈" })
+    })
 app.use('/auth',AuthServer)
 app.use('/file',UrlServer)
 app.use('/downloads',DownloadServer)
 app.use('/',FileServer)
-
 app.listen(5000,()=>
 {
     console.log("Server listening at Port 5000")
