@@ -38,5 +38,5 @@ FileRouter.get("/:hash",async (req,res)=>
         return res.status(404).json({message:FILE_NOT_FOUND});
     }
 });
-// setInterval(cleanFiles,defaultIntervalInSeconds*1000);
+setInterval(cleanFiles,defaultIntervalInSeconds*1000);
 module.exports = FileRouter
