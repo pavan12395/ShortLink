@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { ACCESS_TOKEN, DASHBOARD_HREF, SIGNUP_ROUTE,POST_SUCCESS_STATUS_CODE} from '../constants/constants';
 
 const SignUpContainer = styled.div`
   display: flex;
@@ -102,21 +103,21 @@ const SignUp = () => {
   const [statusCode, setStatusCode] = useState(0);
   useEffect(()=>
   {
-    var accessToken = localStorage.getItem("accessToken");
+    var accessToken = localStorage.getItem(ACCESS_TOKEN);
     if(accessToken)
     {
-        navigate("/dashboard");
+        navigate(DASHBOARD_HREF);
     }
   },[]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/auth/signup', {
+      const response = await axios.post(SIGNUP_ROUTE, {
           name: nameRef.current.value,
           password: passwordRef.current.value,
       });
 
-      if (response.status == 201) {
+      if (response.status == POST_SUCCESS_STATUS_CODE) {
         const data = response.data;
         localStorage.setItem('accessToken', data.accessToken);
         navigate('/dashboard');

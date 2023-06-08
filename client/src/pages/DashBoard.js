@@ -6,6 +6,7 @@ import { FiLink } from 'react-icons/fi';
 import NavBar from '../components/NavBar';
 import { FiLogOut } from 'react-icons/fi';
 import axios from 'axios';
+import { ACCESS_TOKEN, BEARER, DOWNLOAD_FILE_ROUTE, LIST_FILES_ROUTE, OCTET_STREAM, UPLOAD_FILE_ROUTE,GET,BLOB, DELETE_FILE_ROUTE ,NOT_AUTH_MESSAGE,ACCESS_MESSAGE,HOST_PATH,AUTHORIZATION,CONTENT_TYPE, DOWNLOAD} from '../constants/constants';
 const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -115,9 +116,9 @@ const FileContainer = styled.div`
 
 
 async function getListOfFiles() {
-    const url = 'http://localhost:5000/file/listfiles';
+    const url = LIST_FILES_ROUTE;
     const headers = {
-      'Authorization': "Bearer "+localStorage.getItem("accessToken")
+      Authorization: BEARER+localStorage.getItem(ACCESS_TOKEN)
     };  
     const response = await axios.get(url, { headers : headers });
     if (response.status == 200){
@@ -135,9 +136,9 @@ async function uploadFile(file)
 {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await axios.post('http://localhost:5000/file',formData, {
+    const response = await axios.post(UPLOAD_FILE_ROUTE,formData, {
         headers: {
-        'Authorization': "Bearer "+localStorage.getItem("accessToken"),
+        Authorization: BEARER+localStorage.getItem(ACCESS_TOKEN),
         }
       });
 
@@ -153,15 +154,15 @@ async function uploadFile(file)
 async function downloadFile(file)
 {
     const shortLink = file.shortlink;
-    var url = "http://localhost:5000/downloads/"+shortLink;
+    var url = DOWNLOAD_FILE_ROUTE+shortLink;
     const headers = {
-        'Authorization': "Bearer "+localStorage.getItem("accessToken"),
-        'Content-Type': 'application/octet-stream',
+        AUTHORIZATION: BEARER+localStorage.getItem(ACCESS_TOKEN),
+        CONTENT_TYPE : OCTET_STREAM,
     }
     axios({
       url: url, //your url
-      method: 'GET',
-      responseType: 'blob',
+      method: GET,
+      responseType: BLOB,
       headers : headers ,// important
   }).then((response) => {
       // create file link in browser's memory
@@ -170,7 +171,7 @@ async function downloadFile(file)
       // create "a" HTML element with href to file & click
       const link = document.createElement('a');
       link.href = href;
-      link.setAttribute('download', file.name); //or any other extension
+      link.setAttribute(DOWNLOAD, file.name); //or any other extension
       document.body.appendChild(link);
       link.click();
   
@@ -181,9 +182,9 @@ async function downloadFile(file)
 }
 async function deleteFile(file)
 {
-     const url = "http://localhost:5000/file/"+file;
+     const url = DELETE_FILE_ROUTE+file;
      const headers = {
-        'Authorization': "Bearer "+localStorage.getItem("accessToken")
+        AUTHORIZATION: BEARER+localStorage.getItem(ACCESS_TOKEN)
      }
      const response = await axios.delete(url,{headers:headers});
      if(response.status==404)
@@ -201,10 +202,10 @@ const Dashboard = () => {
   const navigate = useNavigate();
   useEffect(()=>
   {
-     var accessToken = localStorage.getItem("accessToken");
+     var accessToken = localStorage.getItem(ACCESS_TOKEN);
      if(accessToken==null || accessToken.length == null)
      {
-        alert("Forbidden Page : User is Not Auhthenticated!");
+        alert(NOT_AUTH_MESSAGE);
         navigate("/");
         return;
      }
@@ -223,7 +224,7 @@ const Dashboard = () => {
     uploadFile(inputFile).then((url)=>
     {
         const new_file = {name : inputFile.name,shortlink : url};
-        setErrorMessage({message:"Access the link at localhost:5000/"+url,erorr:true});
+        setErrorMessage({message:ACCESS_MESSAGE+url,erorr:true});
         setStatusCode("");
         setShowModal(true);
         setFiles([...files,new_file]);
@@ -269,7 +270,7 @@ const Dashboard = () => {
   const handleUpload = (e)=>
   {
     e.preventDefault();
-    localStorage.removeItem("accessToken");
+    localStorage.removeItem(ACCESS_TOKEN);
     navigate("/");
   }
   return (
@@ -299,7 +300,7 @@ const Dashboard = () => {
               <IconButton onClick={()=> handleDownloadFile(file)}>
                 <AiOutlineDownload />
               </IconButton>
-              <IconButton onClick={() => window.open(`http://localhost:5000/${file.shortlink}`, '_blank')}>
+              <IconButton onClick={() => window.open(HOST_PATH+`${file.shortlink}`, '_blank')}>
             <FiLink />
             </IconButton>
             </div>
