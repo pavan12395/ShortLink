@@ -5,17 +5,18 @@ const FileRouter = express.Router()
 const File = require("./models/FileModel")
 const defaultIntervalInSeconds = parseInt(process.env.DEFAULT_INTERVAL,10);
 const {cleanFiles,readFile,getFileName} = require("./utils/file");
+const {PARAM_MISSING,ERROR_FETCHING_FILE,FILE_NOT_FOUND} = require("./constants/constants");
 FileRouter.get("/:hash",async (req,res)=>
 {
     const fileHash = req.params.hash
     if(fileHash.length==0)
     {
-        return res.status(400).json({message:"Param Missing!"});
+        return res.status(400).json({message:PARAM_MISSING});
     }
     var fileName = await getFileName(fileHash);
     if(fileName==null || fileName.length==0)
     {
-        return res.status(404).json({message:"No File Found!"});
+        return res.status(404).json({message:FILE_NOT_FOUND});
     }
     else
     {
@@ -28,9 +29,9 @@ FileRouter.get("/:hash",async (req,res)=>
         }
         catch(err)
         {
-            return res.status(500).json({message:"Error in Fetching file! : "+err.message});
+            return res.status(500).json({message:ERROR_FETCHING_FILE+err.message});
         }
     }
 });
-// setInterval(cleanFiles,defaultIntervalInSeconds*1000);
+setInterval(cleanFiles,defaultIntervalInSeconds*1000);
 module.exports = FileRouter

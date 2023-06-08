@@ -5,14 +5,15 @@ const AuthRouter = express.Router()
 const bcrypt = require("bcrypt")
 const User = require("./models/UserModel")
 const {checkUserName,storeCredentials,generateAccessToken,findUsers,checkUsers} = require("./utils/auth")
-
-
-AuthRouter.get("/hello",(req,res,next)=>
+const {SIGNUP_ROUTE,LOGIN_ROUTE,
+HELLO_ROUTE,HELLO_MESSAGE,USERNAME_TAKEN_MESSAGE,SUCCESSFUL_CREATE_USER,SUCCESSFUL_LOGIN_USER,
+INCORRECT_USERNAME_OR_PASSWORD} = require("./constants/constants");
+AuthRouter.get(HELLO_ROUTE,(req,res,next)=>
 {
-    res.status(200).json({message:"Hello Endpoint!"});
+    res.status(200).json({message:HELLO_MESSAGE});
 });
 
-AuthRouter.post("/signup",async (req,res,next)=>
+AuthRouter.post(SIGNUP_ROUTE,async (req,res,next)=>
 {
     const name = req.body.name;
     const hashPassword = bcrypt.hashSync(req.body.password,10)
@@ -21,11 +22,11 @@ AuthRouter.post("/signup",async (req,res,next)=>
       const result = await checkUserName(name);
       if(!result)
       {
-         return res.status(400).json({message:"Username already Taken!"});
+         return res.status(400).json({message:USERNAME_TAKEN_MESSAGE});
       }  
       storeCredentials(name,hashPassword)
       const accessToken = generateAccessToken(name);
-      return res.status(201).json({message:"Successfully Created the User",accessToken:accessToken});
+      return res.status(201).json({message:SUCCESSFUL_CREATE_USER,accessToken:accessToken});
     }
     catch(err)
     {
@@ -33,7 +34,7 @@ AuthRouter.post("/signup",async (req,res,next)=>
     }
 });
 
-AuthRouter.post("/login",async (req,res,next)=>
+AuthRouter.post(LOGIN_ROUTE,async (req,res,next)=>
 {
     const name = req.body.name
     const password = req.body.password
@@ -44,11 +45,11 @@ AuthRouter.post("/login",async (req,res,next)=>
         if(result)
         {
             const accessToken = generateAccessToken(name)
-            return res.status(200).json({message:"Successfully Logged In",accessToken:accessToken});
+            return res.status(200).json({message:SUCCESSFUL_LOGIN_USER,accessToken:accessToken});
         }
         else
         {
-            return res.status(401).json({message:"Incorrect name or password"});
+            return res.status(401).json({message:INCORRECT_USERNAME_OR_PASSWORD});
         }
     }
     catch(err)

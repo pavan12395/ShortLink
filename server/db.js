@@ -1,16 +1,16 @@
 const mongoose = require("mongoose")
-
+const {OK_DB,ERR_DB,OPEN,ERROR} = require("./constants/constants");
 function connectDB()
 {
     mongoose.connect(process.env.MONGOOSE_CONNECTION_STRING)
     const db = mongoose.connection
-    db.on("error",()=>
+    db.on(ERROR,()=>
     {
-        console.log("Error connecting to Database")
+        console.log(ERR_DB)
     });
-    db.once("open",()=>
+    db.once(OPEN,()=>
     {
-        console.log("Successfully connected to the DB");
+        console.log(OK_DB);
     });
     return db
 }

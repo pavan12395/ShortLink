@@ -6,6 +6,7 @@ const UrlServer = require("./urlServer")
 const FileServer = require("./FileServer")
 const cors = require("cors");
 const DownloadServer = require("./DownloadServer")
+const {AUTH_SERVER_ROUTE,URL_SERVER_ROUTE,DOWNLOAD_SERVER_ROUTE,FILE_SERVER_ROUTE} = require("./constants/constants");
 connectDB()
 const app = express();
 
@@ -29,10 +30,10 @@ app.get('/cors', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     res.send({ "msg": "This has CORS enabled 🎈" })
     })
-app.use('/auth',AuthServer)
-app.use('/file',UrlServer)
-app.use('/downloads',DownloadServer)
-app.use('/',FileServer)
+app.use(AUTH_SERVER_ROUTE,AuthServer)
+app.use(URL_SERVER_ROUTE,UrlServer)
+app.use(DOWNLOAD_SERVER_ROUTE,DownloadServer)
+app.use(FILE_SERVER_ROUTE,FileServer)
 
 app.listen(5000,()=>
 {

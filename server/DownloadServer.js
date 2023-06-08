@@ -3,8 +3,10 @@ const { getFileName } = require("./utils/file");
 const fs = require("fs");
 const path = require("path")
 const DownloadRouter = express.Router()
+const {DOWNLOAD_ROUTE,FILE_NOT_FOUND,UPLOADS_DIR,CONTENT_DIPOSITION,CONTENT_TYPE,
+OCTET_STREAM} = require("./constants/constants")
 
-DownloadRouter.get("/:hash",async (req,res,next)=>
+DownloadRouter.get(DOWNLOAD_ROUTE,async (req,res,next)=>
 {
     var fileHash = req.params.hash;
     try
@@ -13,19 +15,19 @@ DownloadRouter.get("/:hash",async (req,res,next)=>
     }
     catch(err)
     {
-        return res.status(404).json({message:"File Not found!"});
+        return res.status(404).json({message:FILE_NOT_FOUND});
     }
-    var filePath = path.join(__dirname,"uploads",fileName);
+    var filePath = path.join(__dirname,UPLOADS_DIR,fileName);
     if (fs.existsSync(filePath)) {
     // Set appropriate headers for file download
-    res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
-    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader(CONTENT_DIPOSITION, `attachment; filename=${fileName}`);
+    res.setHeader(CONTENT_TYPE, OCTET_STREAM);
 
     // Pipe the file to the response for download
     fs.createReadStream(filePath).pipe(res);
   } else {
     // File not found
-    res.status(404).json({ error: 'File not found.' });
+    res.status(404).json({ error: FILE_NOT_FOUND});
   }
 })
 
