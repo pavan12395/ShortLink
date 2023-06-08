@@ -104,7 +104,7 @@ set up the application on your local machine, follow these steps:
    npm start
 
 4. If you have MongoDB installed on your local machine, mention the connection URI in the `/server/.env` file. Otherwise, start a Docker container of MongoDB and include the connection URI in the `.env` file.
-`docker run -p 80:80 --name mycontainer -e USERNAME=user -e PASSWORD=password myimage`
+`docker run -p 80:80 --name mycontainer -e USERNAME=user -e PASSWORD=password mongo`
 
 
 ## QuickStart Guide
