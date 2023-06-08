@@ -10,10 +10,11 @@ import Login from './pages/Login';
 import Dashboard from './pages/DashBoard';
 import {useEffect} from 'react';
 import axios from 'axios';
+import {DASHBOARD_HREF, HOST_PATH, SIGNUP_HREF,LOGIN_HREF} from './constants/constants';
 const App = () => {
   const makeAPICall = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/', {mode:'cors'});
+      const response = await axios.get(HOST_PATH, {mode:'cors'});
       const data = response.data;
       console.log({ data });
     }
@@ -27,9 +28,9 @@ const App = () => {
   return (
     <Router>
         <Routes>
-        <Route path="/" element={<SignUp/>} />
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path={SIGNUP_HREF} element={<SignUp/>} />
+        <Route path={LOGIN_HREF} element={<Login/>}/>
+        <Route path={DASHBOARD_HREF} element={<Dashboard/>}/>
       </Routes>
     </Router>);
 };

@@ -3,6 +3,7 @@ import React,{useRef,useState} from 'react';
 import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { ACCESS_TOKEN, LOGIN_ROUTE,DASHBOARD_HREF,GET_SUCCESS_STATUS_CODE} from '../constants/constants';
 
 const LoginContainer = styled.div`
   display: flex;
@@ -100,15 +101,15 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post('http://localhost:5000/auth/login', {
+        const response = await axios.post(LOGIN_ROUTE, {
             name: nameRef.current.value,
             password: passwordRef.current.value,
         });
   
-        if (response.status == 200 ) {
+        if (response.status == GET_SUCCESS_STATUS_CODE ) {
           const data = response.data;
-          localStorage.setItem('accessToken', data.accessToken);
-          navigate('/dashboard');
+          localStorage.setItem(ACCESS_TOKEN, data.accessToken);
+          navigate(DASHBOARD_HREF);
         } else {
           const errorData = await response.data;
           setErrorMessage(errorData.message);
