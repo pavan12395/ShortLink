@@ -93,26 +93,26 @@ Please ensure that these dependencies are properly installed before running the 
 set up the application on your local machine, follow these steps:
 
 1. Clone the repository:
-   git clone https://github.com/pavan12395/ShortLink.git
-   git checkout localhost
+   `git clone https://github.com/pavan12395/ShortLink.git`
+   `git checkout localhost`
 
 2. Start the frontend application by navigating to the `client` directory and running the following command:
-   cd client
-   npm start
+   `cd client`
+   `npm start`
 
 3. Start the backend application by navigating to the `server` directory and running the following command:
-   cd server
-   npm start
+   `cd server`
+   `npm start`
 
 4. If you have MongoDB installed on your local machine, mention the connection URI in the `/server/.env` file. Otherwise, start a Docker container of MongoDB and include the connection URI in the `.env` file.
-`docker run -p 80:80 --name mycontainer -e USERNAME=user -e PASSWORD=password mongo`
+`docker run -p 27017:27017 --name mycontainer mongo`
 
 
 ## QuickStart Guide
 
 1. Clone the repository:
-   git clone https://github.com/pavan12395/ShortLink.git
-   git checkout localhost
+   `git clone https://github.com/pavan12395/ShortLink.git`
+   `git checkout localhost`
 
 2. Execute the docker-compose.yaml file and find that three services(frontend,backend,monogodb) are running by the following command
          `docker compose up`
