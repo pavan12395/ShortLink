@@ -127,7 +127,7 @@ const SignUp = () => {
         setShowModal(true);
       }
     } catch (error) {
-        setErrorMessage(error.message);
+        setErrorMessage(error.response.data.message);
         setStatusCode("");
         setShowModal(true);
     }

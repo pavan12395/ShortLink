@@ -213,7 +213,7 @@ const Dashboard = () => {
         setFiles(fetchedFiles)
      }).catch((err)=>
      {
-        setErrorMessage({message:err.message,error:false});
+        setErrorMessage({message:err.response.data.message,error:false});
         setStatusCode("");
         setShowModal(true);
      });
@@ -229,7 +229,7 @@ const Dashboard = () => {
         setFiles([...files,new_file]);
     }).catch((err)=>
     {
-        setErrorMessage({message:err.message,error:false});
+        setErrorMessage({message:err.response.data.message,error:false});
         setStatusCode("");
         setShowModal(true);
     });
@@ -241,7 +241,7 @@ const Dashboard = () => {
         setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
     }).catch((err)=>
     {
-        setErrorMessage({message:err.message,error:false});
+        setErrorMessage({message:err.response.data.message,error:false});
         setStatusCode("");
         setShowModal(true);
     })
@@ -250,7 +250,7 @@ const Dashboard = () => {
   {
      downloadFile(file).catch((err)=>
      {
-        setErrorMessage({message:err.message,error:false});
+        setErrorMessage({message:err.response.data.message,error:false});
         setStatusCode("");
         setShowModal(true);
      })
