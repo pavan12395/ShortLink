@@ -34,7 +34,7 @@ app.use('/file',UrlServer)
 app.use('/downloads',DownloadServer)
 app.use('/',FileServer)
 
-https.createServer(null, app).listen(5000,()=>
+app.listen(5000,()=>
 {
-    console.log("Server listening at Port : 5000");
+    console.log("Server listening on Port : 5000");
 });

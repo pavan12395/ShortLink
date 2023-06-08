@@ -100,7 +100,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post('https://localhost:5000/auth/login', {
+        const response = await axios.post('http://localhost:5000/auth/login', {
             name: nameRef.current.value,
             password: passwordRef.current.value,
         });
