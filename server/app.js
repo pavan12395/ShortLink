@@ -15,7 +15,11 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
-app.use(cors());
+app.use(cors(
+    {
+        origin:"http://localhost:3000",
+    }
+));
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.get('/cors', (req, res) => {
