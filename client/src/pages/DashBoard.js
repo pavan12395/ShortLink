@@ -214,8 +214,6 @@ const Dashboard = () => {
      }).catch((err)=>
      {
         setErrorMessage(err.response ? err.response.data.message : err.message);
-        setErrorMessage(error.response ? error.response.data.message : error.message);
-
         setStatusCode("");
         setShowModal(true);
      });
