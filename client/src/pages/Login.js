@@ -121,7 +121,9 @@ const Login = () => {
           setShowModal(true);
         }
       } catch (error) {
-        console.log('Error:', error);
+        setErrorMessage(error.message);
+          setStatusCode("");
+          setShowModal(true);
       }
   };
   const closeModal = () => {
