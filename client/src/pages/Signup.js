@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { ACCESS_TOKEN, DASHBOARD_HREF, SIGNUP_ROUTE,POST_SUCCESS_STATUS_CODE} from '../constants/constants';
+import { ACCESS_TOKEN, DASHBOARD_HREF, SIGNUP_ROUTE,POST_SUCCESS_STATUS_CODE,validateCredentials} from '../constants/constants';
 
 const SignUpContainer = styled.div`
   display: flex;
@@ -111,6 +111,7 @@ const SignUp = () => {
   },[]);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    validateCredentials(nameRef.current.value,passwordRef.current.value);
     try {
       const response = await axios.post(SIGNUP_ROUTE, {
           name: nameRef.current.value,

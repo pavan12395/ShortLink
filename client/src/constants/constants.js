@@ -20,3 +20,18 @@ export const POST_SUCCESS_STATUS_CODE = 201;
 export const GET_SUCCESS_STATUS_CODE = 200;
 export const SIGNUP_HREF = "/";
 export const LOGIN_HREF = "/login";
+export function validateCredentials(name,password)
+{
+    if(name.length==0)
+    {
+        throw new Error("UserName entered is Empty!");
+    }
+    else if(password.length==0)
+    {
+        throw new Error("Password entered in Empty!");
+    }
+    else if(password.length<=3)
+    {
+        throw new Error("Enter a Password of minimum size 4");
+    }
+}
