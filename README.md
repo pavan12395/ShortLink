@@ -94,6 +94,7 @@ set up the application on your local machine, follow these steps:
 
 1. Clone the repository:
    git clone https://github.com/pavan12395/ShortLink.git
+   git checkout localhost
 
 2. Start the frontend application by navigating to the `client` directory and running the following command:
    cd client
@@ -109,18 +110,14 @@ set up the application on your local machine, follow these steps:
 
 ## QuickStart Guide
 
-1. Execute the docker-compose.yaml file and find that three services(frontend,backend,monogodb) are running by the following command
+1. Clone the repository:
+   git clone https://github.com/pavan12395/ShortLink.git
+   git checkout localhost
+
+2. Execute the docker-compose.yaml file and find that three services(frontend,backend,monogodb) are running by the following command
          `docker compose up`
-2. Access frontend at localhost:3000
-3. Access Backend at localhost:5000
-
-## Deployment Procedure
-
-1. Dockerized the front-end and back-end
-2. Made use of Docker-compose to host the application on Amazon EC2.
-
-
-## Access the hosted application at http://52.201.232.145:3000/
+3. Access frontend at localhost:3000
+4. Access Backend at localhost:5000
 
 
 
