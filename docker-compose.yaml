@@ -8,13 +8,13 @@ services:
       MONGO_INITDB_ROOT_USERNAME: user
       MONGO_INITDB_ROOT_PASSWORD: password
   backend:
-    image: pavan5883/back-end:1.0.6
+    image: pavan5883/back-end:1.0.7
     ports:
       - 5000:5000
     depends_on:
       - mongodb
   frontend:
-    image: pavan5883/front-end:1.0.6
+    image: pavan5883/front-end:1.0.7
     ports:
       - 3000:3000
     depends_on:
