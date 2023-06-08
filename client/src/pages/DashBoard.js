@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import { FiLink } from 'react-icons/fi';
 import NavBar from '../components/NavBar';
 import { FiLogOut } from 'react-icons/fi';
+import axios from 'axios';
 const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -118,14 +119,14 @@ async function getListOfFiles() {
     const headers = {
       'Authorization': "Bearer "+localStorage.getItem("accessToken")
     };  
-    const response = await fetch(url, { headers });
-    if (response.ok){
-        const data = await response.json();
+    const response = await axios.get(url, { headers : headers });
+    if (response.status == 200){
+        const data = await response.data;
         return data.files;
     }
     else
     {
-        const errorData = await response.json();
+        const errorData = await response.data;
         throw new Error(errorData.message);
     }
 }
@@ -134,20 +135,18 @@ async function uploadFile(file)
 {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await fetch('http://localhost:5000/file', {
-        method: 'POST',
+    const response = await axios.post('http://localhost:5000/file',formData, {
         headers: {
         'Authorization': "Bearer "+localStorage.getItem("accessToken"),
-        },
-        body: formData,
+        }
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status == 200) {
+        const data = await response.data;
         return data.url;
         // Do something with the response if needed
       } else {
-        const errData = await response.json();
+        const errData = await response.data;
         throw new Error(errData.message);
       }
 }
@@ -159,20 +158,26 @@ async function downloadFile(file)
         'Authorization': "Bearer "+localStorage.getItem("accessToken"),
         'Content-Type': 'application/octet-stream',
     }
-    const response = await fetch(url,headers);
-    const blob = await response.blob();
-      url = window.URL.createObjectURL(blob);
+    axios({
+      url: url, //your url
+      method: 'GET',
+      responseType: 'blob',
+      headers : headers ,// important
+  }).then((response) => {
+      // create file link in browser's memory
+      const href = URL.createObjectURL(response.data);
+  
+      // create "a" HTML element with href to file & click
       const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download',file.name);
+      link.href = href;
+      link.setAttribute('download', file.name); //or any other extension
       document.body.appendChild(link);
       link.click();
+  
+      // clean up "a" element & remove ObjectURL
       document.body.removeChild(link);
-    if(!response.ok)
-    {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-    }
+      URL.revokeObjectURL(href);
+  });
 }
 async function deleteFile(file)
 {
@@ -180,14 +185,10 @@ async function deleteFile(file)
      const headers = {
         'Authorization': "Bearer "+localStorage.getItem("accessToken")
      }
-     const request = {
-        method : "DELETE",
-        headers : headers
-     }
-     const response = await fetch(url,request);
-     if(!response.ok)
+     const response = await axios.delete(url,{headers:headers});
+     if(response.status==404)
      {
-        const errorData = await response.json();
+        const errorData = await response.data;
         throw new Error(errorData.message);
      }
 }

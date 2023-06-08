@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
 import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
@@ -110,23 +111,17 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const response = await axios.post('http://localhost:5000/auth/signup', {
           name: nameRef.current.value,
           password: passwordRef.current.value,
-        }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status == 201) {
+        const data = response.data;
         localStorage.setItem('accessToken', data.accessToken);
         navigate('/dashboard');
       } else {
-        const errorData = await response.json();
+        const errorData = await response.data;
         setErrorMessage(errorData.message);
         setStatusCode(response.status);
         setShowModal(true);

@@ -4,6 +4,7 @@ const connectDB = require("./db")
 const AuthServer = require("./authServer")
 const UrlServer = require("./urlServer")
 const FileServer = require("./FileServer")
+const cors = require("cors");
 const DownloadServer = require("./DownloadServer")
 connectDB()
 

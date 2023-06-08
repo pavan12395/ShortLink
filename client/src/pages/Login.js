@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React,{useRef,useState} from 'react';
 import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
@@ -99,23 +100,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch('http://localhost:5000/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+        const response = await axios.post('http://localhost:5000/auth/login', {
             name: nameRef.current.value,
             password: passwordRef.current.value,
-          }),
         });
   
-        if (response.ok) {
-          const data = await response.json();
+        if (response.status == 200 ) {
+          const data = response.data;
           localStorage.setItem('accessToken', data.accessToken);
           navigate('/dashboard');
         } else {
-          const errorData = await response.json();
+          const errorData = await response.data;
           setErrorMessage(errorData.message);
           setStatusCode(response.status);
           setShowModal(true);
