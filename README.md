@@ -1,13 +1,12 @@
 # ShortLink Application
 
-ShortLink is a URL shortening application similar to TinyURL. It allows users to create shortened links for long URLs, making them easier to share and remember. This project consists of a front-end implemented using React and a back-end using MongoDB as the database. The communication between the front-end and back-end is done via HTTP protocol.
+ShortLink is a URL shortening application similar to TinyURL. It allows users to create shortened links for long URLs, making them easier to share and remember. This project consists of a front-end implemented using React and a back-end using NodeJS and MongoDB as the database. The communication between the front-end and back-end is done via HTTP protocol.
 
 ## Features
 
 - User Authentication: The server uses JWT (JSON Web Tokens) for user authentication and authorization. Users can sign up and log in to the application.
 - Password Encryption: The server encrypts user passwords using the bcrypt library, ensuring secure storage of user credentials.
 - URL Shortening: The application provides a route for shortening long URLs. Users can input a long URL, and the server will generate a shortened URL that redirects to the original long URL.
-- URL Expansion: The application also allows users to expand shortened URLs. By providing a shortened URL, the server returns the original long URL.
 - File Upload: The server includes functionality for uploading files. Files are associated with the user who uploaded them and are stored in the `/uploads` directory of the Node application.
 - File Deletion: Users can delete files they have uploaded using the provided route.
 - File Serving: The server serves files to users. By accessing the appropriate route, users can retrieve the file associated with a specific file hash.
