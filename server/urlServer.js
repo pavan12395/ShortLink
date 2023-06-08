@@ -7,9 +7,10 @@ const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 const fs = require("fs");
 const File = require("./models/FileModel")
+const {checkUserName} = require("./utils/auth");
 const {hashString,storeFile,storeFileRecord,deleteFile,validateFile,listFiles} = require('./utils/file');
 const {AUTHORIZATION,FILE,UTF8,SUCCESSFULL_FILE_UPLOAD,ERROR_STORING_FILE,DELETE_FILE_ROUTE,SUCCESSFUL_FILE_DELETE,LIST_FILES_ROUTE
-,FETCH_SUCCESSFUL,ERROR_FETCH_FILE,INVALID_TOKEN,UPLOAD_URL_ROUTE} = require("./constants/constants");
+,FETCH_SUCCESSFUL,ERROR_FETCH_FILE,INVALID_TOKEN,UPLOAD_URL_ROUTE,NO_USER_EXIST} = require("./constants/constants");
 async function checkToken(req,res,next)
 {
     var accessToken = req.headers[AUTHORIZATION]
@@ -25,6 +26,11 @@ async function checkToken(req,res,next)
           if(result)
           {
             const decodedToken = jwt.decode(accessToken)
+            const userNamecheck = await checkUserName(decodedToken.name);
+            if(userNamecheck)
+            {
+               return res.status(403).json({message:NO_USER_EXIST});
+            }
             req.token = decodedToken
             return next()
           }
