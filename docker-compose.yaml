@@ -1,4 +1,4 @@
-version: 3
+version: '3.8'
 services:
   mongodb:
     image: mongo
@@ -8,10 +8,14 @@ services:
       MONGO_INITDB_ROOT_USERNAME: user
       MONGO_INITDB_ROOT_PASSWORD: password
   backend:
-    image: pavan5883/backend:1.0.0
+    image: pavan5883/back-end:1.0.0
     ports:
       - 5000:5000
+    depends_on:
+      - mongodb
   frontend:
-    image: pavan5883/frontend:1.0.0
+    image: pavan5883/front-end:1.0.0
     ports:
       - 3000:3000
+    depends_on:
+      - backend
