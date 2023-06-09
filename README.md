@@ -1,12 +1,12 @@
 # ShortLink Application
 
-ShortLink is a URL shortening application similar to TinyURL. It allows users to create shortened links for long URLs, making them easier to share and remember. This project consists of a front-end implemented using React and a back-end using NodeJS and MongoDB as the database. The communication between the front-end and back-end is done via HTTP protocol.
+ShortLink is a URL shortening application similar to TinyURL. It allows users to create shortened links for Uploaded files, making them easier to share and remember. This project consists of a front-end implemented using React and a back-end using NodeJS and MongoDB as the database. The communication between the front-end and back-end is done via HTTP protocol.
 
 ## Features
 
 - User Authentication: The server uses JWT (JSON Web Tokens) for user authentication and authorization. Users can sign up and log in to the application.
 - Password Encryption: The server encrypts user passwords using the bcrypt library, ensuring secure storage of user credentials.
-- URL Shortening: The application provides a route for shortening long URLs. Users can input a long URL, and the server will generate a shortened URL that redirects to the original long URL.
+- URL Shortening: The application provides a route for retrieving the Uploaded files. Users can input a file, and the server will generate a shortened URL that redirects to the original file.
 - File Upload: The server includes functionality for uploading files. Files are associated with the user who uploaded them and are stored in the `/uploads` directory of the Node application.
 - File Deletion: Users can delete files they have uploaded using the provided route.
 - File Serving: The server serves files to users. By accessing the appropriate route, users can retrieve the file associated with a specific file hash.
@@ -57,17 +57,6 @@ The Node application reads certain entities from the `.env` file. The following 
 - `DEFAULT_INTERVAL`: Default interval (in seconds) for the cleanFiles job to run (default: 30)
 - `ALLOWED_EXTENSIONS`: Comma-separated list of allowed file extensions (default: txt,lam,json,py,java,c,js,tsx,jsx,go,html,css)
 - `MAX_SIZE`: Maximum size (in bytes) for uploaded files (default: 5000000)
-
-## Running the Application
-
-To run the application locally, follow these steps:
-
-1. Clone the repository: `git clone <repository-url>`
-2. Install dependencies: `npm install`
-3. Set up the MongoDB database and configure the connection in `.env`.
-4. Customize the configuration parameters in `.env` if desired.
-5. Start the application: `npm start`
-6. Access the application in your browser at `http://localhost:3000`
 
 ## CleanFiles Job
 
