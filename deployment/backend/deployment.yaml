@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      team: backend
+  template:
+    metadata:
+      labels:
+        team: backend
+    spec:
+      containers:
+      - name: backend
+        image: pavan5883/back-end:1.0.2
+        env:
+            - name: MONGOOSE_CONNECTION_STRING
+              value: "mongodb://user:password@10.104.53.217:27017"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000

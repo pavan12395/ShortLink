@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      team: frontend
+  template:
+    metadata:
+      labels:
+        team: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: pavan5883/front-end:1.0.9
+        resources:
+          limits:
+            memory: "1000Mi"
+            cpu: "1000m"
+        ports:
+        - containerPort: 3000
