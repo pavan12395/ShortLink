@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 const {OK_DB,ERR_DB,OPEN,ERROR} = require("./constants/constants");
 function connectDB()
 {
+    console.log("MONGO_URI : "+process.env.MONGOOSE_CONNECTION_STRING)
     mongoose.connect(process.env.MONGOOSE_CONNECTION_STRING)
     const db = mongoose.connection
     db.on(ERROR,()=>

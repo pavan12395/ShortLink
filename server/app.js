@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express = require("express")
 const https = require('https');
 const connectDB = require("./db")
@@ -9,7 +10,6 @@ const DownloadServer = require("./DownloadServer")
 const {AUTH_SERVER_ROUTE,URL_SERVER_ROUTE,DOWNLOAD_SERVER_ROUTE,FILE_SERVER_ROUTE} = require("./constants/constants");
 connectDB()
 const app = express();
-
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
